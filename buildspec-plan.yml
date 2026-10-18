@@ -1,0 +1,28 @@
+version: 0.2
+
+env:
+  variables:
+    TF_IN_AUTOMATION: "true"
+    TF_INPUT: "false"
+
+phases:
+  install:
+    commands:
+      - |
+        set -eu
+        TF_VERSION=1.10.5
+        curl -fsSLo /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip"
+        unzip -oq /tmp/terraform.zip -d /tmp/terraform-bin
+        install -m 0755 /tmp/terraform-bin/terraform /usr/local/bin/terraform
+        terraform version
+  build:
+    commands:
+      - terraform init -input=false -backend-config="bucket=$TF_STATE_BUCKET" -backend-config="key=$TF_STATE_KEY" -backend-config="region=$AWS_REGION" -backend-config="dynamodb_table=$TF_LOCK_TABLE" -backend-config="encrypt=true"
+      - terraform validate
+      - terraform plan -input=false -out=tfplan
+      - terraform show -no-color tfplan | tee terraform-plan.txt
+
+artifacts:
+  files:
+    - tfplan
+    - terraform-plan.txt
