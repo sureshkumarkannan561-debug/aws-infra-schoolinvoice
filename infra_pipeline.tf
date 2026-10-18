@@ -78,7 +78,7 @@ resource "aws_dynamodb_table" "terraform_locks" {
 }
 
 resource "aws_codestarconnections_connection" "github" {
-  name          = "${local.name}-infrastructure-github"
+  name          = "${local.name}-infra-github"
   provider_type = "GitHub"
 
   tags = local.common_tags
@@ -474,7 +474,7 @@ resource "aws_codepipeline" "infrastructure" {
       input_artifacts = ["SourceArtifact", "PlanArtifact"]
 
       configuration = {
-        ProjectName = aws_codebuild_project.apply.name
+        ProjectName   = aws_codebuild_project.apply.name
         PrimarySource = "SourceArtifact"
       }
     }
