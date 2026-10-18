@@ -1,0 +1,5 @@
+aws_region        = "ap-south-1"
+app_name          = "schoolinvoice"
+github_owner      = "sureshkumarkannan561-debug"
+github_repository = "aws-infra-schoolinvoice"
+github_branch     = "main"
