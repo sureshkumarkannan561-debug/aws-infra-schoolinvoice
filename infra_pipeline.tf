@@ -32,7 +32,7 @@ resource "aws_s3_bucket" "terraform_state" {
   bucket_prefix = "${local.name}-${data.aws_caller_identity.current.account_id}-tfstate-"
 
   lifecycle {
-    prevent_destroy = true
+    force_destroy = true
   }
 
   tags = merge(local.common_tags, { Name = "${local.name}-terraform-state" })
